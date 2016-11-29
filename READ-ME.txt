@@ -1,0 +1,2 @@
+An infinite runner game. An attempt to recreate at least the first level of
+an online game called Cube Runner.
