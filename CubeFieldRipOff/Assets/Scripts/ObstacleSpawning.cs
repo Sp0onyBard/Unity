@@ -1,30 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//Class controlling the spawning of obstacles
 public class ObstacleSpawning : MonoBehaviour {
 
-    private float rate;
-    private bool cubeActive;
+    private float rate; //Wait time between cube generation
+    private bool cubeActive; //Boolean for deciding whether or not to spawn
 
-    public float max;
-    public float min;
+    public float max; //Maximum x-coordinate to spawn cube
+    public float min; //Minimum x-coordinate to spawn cube
 
-    public GameObject cube;
+    public GameObject cube; //field for cube prefab
 
     // Use this for initialization
-    void Start () {
+    void Start () { //Set an initial rate
         rate = 0.05f;
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	// If wait time as elapsed, spawn another cube
+	void Update () { 
         if (!cubeActive)
         {
             StartCoroutine(sendCube());
         }	
 	}
 
-    IEnumerator sendCube()
+    IEnumerator sendCube() //Instantiate a cube at a randomized x-coordinate and preset z and t coordinates
     {
         cubeActive = true;
         float xpos;

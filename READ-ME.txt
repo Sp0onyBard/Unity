@@ -1,2 +1,4 @@
 An infinite runner game. An attempt to recreate at least the first level of
 an online game called Cube Runner.
+
+Player uses left and right keys to evade a swarm of oncoming cubes.

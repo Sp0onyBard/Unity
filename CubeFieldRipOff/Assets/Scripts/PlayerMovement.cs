@@ -2,29 +2,28 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
+//Class for controlling the player object
 public class PlayerMovement : MonoBehaviour {
 
-    public float speed;
+    public float speed; //movement speed
 
-    private float vertspd;
-    private float maximum = 350;
-    private float minimum = 10;
-    private Rigidbody rb;
-    private Vector3 next;
-    private Camera cam;
-    private Transform camtran;
-    private float sensitivity = 2;
+    private float maximum = 350;//Maximum angle, for use in camera tilting
+    private float minimum = 10;//Minimum angle, for use in camera tilting
+    private Rigidbody rb; //field for ridigbody component
+    private Camera cam; //field for camera component
+    private Transform camtran; //field for transform of camera
+    private float sensitivity = 2; //factor for magnitude of camera tilting
 
-    private GameObject camera;
-    private GameObject spawner;
-    private GameObject particles;
-    private ParticleSystem ps;
-    private PlayerMovement pm;
-    private MeshRenderer mr;
-    private BoxCollider bc;
+    private GameObject camera; //field for camera object
+    private GameObject spawner; //field for the cube spawner
+    private GameObject particles; //field for the particle emitter
+    private ParticleSystem ps; //field for particle system component
+    private PlayerMovement pm; //field for this script
+    private MeshRenderer mr; //field for mesh renderer component
+    private BoxCollider bc; //field for box collider component
     
 
-    void Start()
+    void Start() //Initialize all fields
     {
         Transform spawnt;
         Transform particlet;
@@ -45,7 +44,7 @@ public class PlayerMovement : MonoBehaviour {
         bc = GetComponent<BoxCollider>();
     }
 
-    void FixedUpdate()
+    void FixedUpdate() //Move player object left or right and tilt camera
     {
         float moveHorizontal = Input.GetAxisRaw("Horizontal");
 
@@ -57,7 +56,7 @@ public class PlayerMovement : MonoBehaviour {
     }
 
 
-    IEnumerator GameOver()
+    IEnumerator GameOver() //Game over sequence. Switch scene and disable components
     {
         ps.Play();
         pm.enabled = false;
@@ -68,7 +67,7 @@ public class PlayerMovement : MonoBehaviour {
         SceneManager.LoadScene(1);
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision) //Check for collision with obstacle
     {
         if (collision.gameObject.CompareTag("Obstacle"))
         {
@@ -76,28 +75,28 @@ public class PlayerMovement : MonoBehaviour {
         }
     }
 
-    void setTilt(float move, float max, float min, Transform camT)
+    void setTilt(float move, float max, float min, Transform camT) //Set the camera's rotation
     {
         Vector3 result;
         result = tiltCamera(move, max, min, camT);
         camT.eulerAngles = result; 
     }
 
-    Vector3 tiltCamera(float move, float max, float min, Transform camT)
+    Vector3 tiltCamera(float move, float max, float min, Transform camT) //Calculate camera's rotation
     {
         float tilt;
         Vector3 newpos;
-        if (move == 0)
+        if (move == 0) //Reset to normal
         {
             tilt = Mathf.LerpAngle(camT.eulerAngles.z, 0, Time.deltaTime*sensitivity);
             newpos = new Vector3(5, 0, tilt);
             return newpos;
-        } else if (move < 0)
+        } else if (move < 0)//Tilt left
         {
             tilt = Mathf.LerpAngle(camT.eulerAngles.z, 10, Time.deltaTime*sensitivity);
             newpos = new Vector3(5, 0, tilt);
             return newpos;
-        } else
+        } else //Tilt right
         {
             tilt = Mathf.LerpAngle(camT.eulerAngles.z, 350, Time.deltaTime*sensitivity);
             newpos = new Vector3(5, 0, tilt);
