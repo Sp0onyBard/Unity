@@ -14,7 +14,7 @@ public class ObstacleSpawning : MonoBehaviour {
 
     // Use this for initialization
     void Start () { //Set an initial rate
-        rate = 0.05f;
+        rate = 0.03f;
 	}
 	
 	// If wait time as elapsed, spawn another cube
@@ -31,7 +31,7 @@ public class ObstacleSpawning : MonoBehaviour {
         float xpos;
         Vector3 position;
         xpos = Random.Range(min, max);
-        position = new Vector3(xpos, transform.position.y + 0.25f, transform.position.z);
+        position = new Vector3(transform.position.x + xpos, transform.position.y + 0.25f, transform.position.z);
         yield return new WaitForSeconds(rate);
         Instantiate(cube, position, transform.rotation);
         cubeActive = false;

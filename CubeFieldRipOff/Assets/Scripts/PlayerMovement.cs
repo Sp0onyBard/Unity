@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 //Class for controlling the player object
 public class PlayerMovement : MonoBehaviour {
 
     public float speed; //movement speed
+    public Text score; //score text
+    public static int scoren;
 
     private float maximum = 350;//Maximum angle, for use in camera tilting
     private float minimum = 10;//Minimum angle, for use in camera tilting
@@ -21,6 +24,7 @@ public class PlayerMovement : MonoBehaviour {
     private PlayerMovement pm; //field for this script
     private MeshRenderer mr; //field for mesh renderer component
     private BoxCollider bc; //field for box collider component
+    private bool dying;
     
 
     void Start() //Initialize all fields
@@ -42,6 +46,8 @@ public class PlayerMovement : MonoBehaviour {
         pm = GetComponent<PlayerMovement>();
         mr = GetComponent<MeshRenderer>();
         bc = GetComponent<BoxCollider>();
+        dying = false;
+        scoren = 0;
     }
 
     void FixedUpdate() //Move player object left or right and tilt camera
@@ -52,19 +58,21 @@ public class PlayerMovement : MonoBehaviour {
         movement = movement.normalized *speed* Time.deltaTime;
         setTilt(moveHorizontal, maximum, minimum, camtran);
         rb.MovePosition(transform.position + movement);
+        SetScore();
 
     }
 
 
     IEnumerator GameOver() //Game over sequence. Switch scene and disable components
     {
+        dying = true;
         ps.Play();
         pm.enabled = false;
         mr.enabled = false;
         bc.enabled = false;
         spawner.SetActive(false);
         yield return new WaitForSeconds(1f);
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
     }
 
     void OnCollisionEnter(Collision collision) //Check for collision with obstacle
@@ -101,6 +109,15 @@ public class PlayerMovement : MonoBehaviour {
             tilt = Mathf.LerpAngle(camT.eulerAngles.z, 350, Time.deltaTime*sensitivity);
             newpos = new Vector3(5, 0, tilt);
             return newpos;
+        }
+    }
+
+    void SetScore()
+    {
+        if (!dying)
+        {
+            scoren += 1;
+            score.text = "Score: " + scoren;
         }
     }
 
